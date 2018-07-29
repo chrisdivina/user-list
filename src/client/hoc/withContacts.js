@@ -10,10 +10,7 @@ const withContacts = WrappedComponent => {
     const { contacts = {} } = state;
     const { isFetching = true } = contacts;
     return {
-      contacts: {
-        items: contacts.items,
-        itemsById: getFilteredContacts(state)
-      },
+      contacts: getFilteredContacts(state),
       areContactsFetching: isFetching
     };
   };

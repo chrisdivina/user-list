@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import ReactHtmlParser from 'react-html-parser';
 import { withContacts, withFilter } from '../hoc';
 
 class ContactList extends PureComponent {
@@ -20,7 +21,7 @@ class ContactList extends PureComponent {
   }
 
   render() {
-    const { areContactsFetching, contacts } = this.props;
+    const { areContactsFetching, contacts, filter } = this.props;
     const { itemsById, items } = contacts;
 
     return (
@@ -42,6 +43,9 @@ class ContactList extends PureComponent {
                   <Link to={`/contact/${id}`}>
                     {items[id].name}
                   </Link>
+                  {filter && items[id].match && items[id].match.length > 0
+                    && <p>{ReactHtmlParser(items[id].match)}</p>
+                  }
                 </li>
               ))}
             </ul>
@@ -56,7 +60,8 @@ ContactList.propTypes = {
   loadContacts: PropTypes.func.isRequired,
   areContactsFetching: PropTypes.bool.isRequired,
   contacts: PropTypes.arrayOf.isRequired,
-  onUpdateFilter: PropTypes.func.isRequired
+  onUpdateFilter: PropTypes.func.isRequired,
+  filter: PropTypes.string.isRequired
 };
 
 export default withFilter(withContacts(ContactList));

@@ -7,12 +7,24 @@ export default createSelector(
   [getContacts, getFilter],
   (contacts, filter) => {
     if (filter.length === 0) {
-      return contacts.itemsById;
+      return contacts;
     }
-    return contacts.itemsById.filter(contactId => {
+    const { items } = contacts;
+    const itemsById = contacts.itemsById.filter(contactId => {
       const { id, avatar, ...details } = contacts.items[contactId];
       const contact = { ...details };
-      return Object.keys(contact).some(key => contact[key].includes(filter));
+      return Object.keys(contact).some(key => {
+        if (contact[key].includes(filter)) {
+          items[contactId].match = contact[key].replace(filter, `<em>${filter}</em>`);
+          return true;
+        }
+        return false;
+      });
     });
+
+    return {
+      itemsById,
+      items
+    };
   }
 );
