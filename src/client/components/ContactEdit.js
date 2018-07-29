@@ -8,7 +8,6 @@ import { withContacts } from '../hoc';
 const apiURL = process.env.REACT_APP_API_URL || '';
 
 const onSubmit = ({ formData }) => {
-  console.log(formData);
   const { id, ...details } = formData;
   fetch(`${apiURL}/contacts/${id}`, {
     method: 'POST',
