@@ -3,21 +3,13 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import ReactHtmlParser from 'react-html-parser';
 import { withContacts, withFilter } from '../hoc';
+import TopBar from './TopBar';
+import ContactFilter from './ContactFilter';
 
 class ContactList extends PureComponent {
-  constructor() {
-    super();
-    this.onFilter = this.onFilter.bind(this);
-  }
-
   componentDidMount() {
     const { loadContacts } = this.props;
     loadContacts();
-  }
-
-  onFilter(e) {
-    const { onUpdateFilter } = this.props;
-    onUpdateFilter(e.target.value);
   }
 
   render() {
@@ -26,15 +18,8 @@ class ContactList extends PureComponent {
 
     return (
       <div>
-        <p>
-          <Link to="/add">
-            Add new contact
-          </Link>
-        </p>
-        <input
-          type="text"
-          onChange={this.onFilter}
-        />
+        <TopBar />
+        <ContactFilter />
         {!areContactsFetching
           && (
             <ul>
@@ -60,7 +45,6 @@ ContactList.propTypes = {
   loadContacts: PropTypes.func.isRequired,
   areContactsFetching: PropTypes.bool.isRequired,
   contacts: PropTypes.arrayOf.isRequired,
-  onUpdateFilter: PropTypes.func.isRequired,
   filter: PropTypes.string.isRequired
 };
 
