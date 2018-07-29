@@ -14,6 +14,9 @@
       "no-else-return": "off",
       "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
       "arrow-parens": ["error", "as-needed"],
-      "comma-dangle": ["error", "never"]
+      "comma-dangle": ["error", "never"],
+      "import/prefer-default-export": "off",
+      "react/jsx-one-expression-per-line": "off",
+      "react/button-has-type": "off"
   },
 }

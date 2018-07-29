@@ -1,13 +1,10 @@
-{
-  "1": {
-    "id": "1",
-    "name": "Chris",
-    "jobTitle": "Senior Front-End Developer",
-    "address": "497, Galt Street",
-    "numbers": {
-      "default": "514-707-9282"
-    },
+[
+  {
+    "name": "Christophe Divina",
+    "address": "Flat 178,, Roma Corte,, 1 Elmira Street",
+    "phone": "7591920611",
     "email": "christophedivina@gmail.com",
-    "avatar": ""
+    "id": "kfrzueeWcm",
+    "avatar": "kfrzueeWcm.jpeg"
   }
-}
+]
