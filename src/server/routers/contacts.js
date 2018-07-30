@@ -5,7 +5,7 @@ const { upload, generateId } = require('../middleware');
 
 const router = express.Router();
 
-router.use('/:id', generateId);
+router.use(generateId);
 router.use(upload);
 
 router.get('/', (req, res) => {

@@ -16,7 +16,7 @@ const styles = {
     justifyContent: 'center'
   },
   flex: {
-    margin: 'auto'
+    margin: 'auto 40px'
   }
 };
 

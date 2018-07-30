@@ -16,13 +16,13 @@ export default createSelector(
       return Object.keys(contact).some(key => {
         if (typeof contact[key] === 'object') {
           return Object.keys(contact[key]).some(subKey => {
-            if (contact[key][subKey].includes(filter)) {
+            if (contact[key][subKey].toLowerCase().includes(filter.toLowerCase())) {
               items[contactId].match = contact[key][subKey].replace(filter, `<b>${filter}</b>`);
               return true;
             }
             return false;
           });
-        } else if (contact[key].includes(filter)) {
+        } else if (contact[key].toLowerCase().includes(filter.toLowerCase())) {
           items[contactId].match = contact[key].replace(filter, `<b>${filter}</b>`);
           return true;
         }
