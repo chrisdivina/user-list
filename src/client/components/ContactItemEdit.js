@@ -1,37 +1,43 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Form from 'react-jsonschema-form';
 import PropTypes from 'prop-types';
 import { contactSchema } from '../schemas';
 import { withContacts } from '../hoc';
 
-const apiURL = process.env.REACT_APP_API_URL || '';
+class ContactItemEdit extends Component {
+  constructor() {
+    super();
+    this.onSubmit = this.onSubmit.bind(this);
+  }
 
-const onSubmit = ({ formData }) => {
-  const { id, ...details } = formData;
-  fetch(`${apiURL}/contacts/${id}`, {
-    method: 'POST',
-    body: JSON.stringify({ ...details }),
-    headers: {
-      'Content-Type': 'application/json'
+  onSubmit({ formData }) {
+    const { id, ...details } = formData;
+    const { onUpdateContact } = this.props;
+    onUpdateContact(id, { ...details });
+  }
+
+  render() {
+    const { contactId, contacts, isFetching = false } = this.props;
+    const { schema, uiSchema } = contactSchema;
+    const contact = contacts.items[contactId];
+
+    if (isFetching) {
+      return null;
     }
-  })
-    .then(res => res.json())
-    .catch(err => console.log(err))
-    .then(res => console.log(res));
-};
 
-const ContactItemEdit = ({ contactId, contacts }) => {
-  const { schema, uiSchema } = contactSchema;
-  const contact = contacts.items[contactId];
+    return (
+      <Form
+        schema={schema}
+        uiSchema={uiSchema}
+        onSubmit={this.onSubmit}
+        formData={contact}
+      />
+    );
+  }
+}
 
-  return (
-    <Form
-      schema={schema}
-      uiSchema={uiSchema}
-      onSubmit={onSubmit}
-      formData={contact}
-    />
-  );
+ContactItemEdit.defaultProps = {
+  isFetching: false
 };
 
 ContactItemEdit.propTypes = {
@@ -39,7 +45,9 @@ ContactItemEdit.propTypes = {
   contacts: PropTypes.shape({
     itemsById: PropTypes.array,
     items: PropTypes.object
-  }).isRequired
+  }).isRequired,
+  onUpdateContact: PropTypes.func.isRequired,
+  isFetching: PropTypes.bool
 };
 
 export default withContacts(ContactItemEdit);

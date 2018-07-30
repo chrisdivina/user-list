@@ -1,24 +1,36 @@
-import React, { Fragment } from 'react';
+import React from 'react';
+import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { Avatar, Typography, List } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import DetailsBlock from './DetailsBlock';
+import DeleteConfirmationButton from './DeleteConfirmationButton';
 import { withContacts } from '../hoc';
 import { contactSchema } from '../schemas';
 
-const apiURL = process.env.REACT_APP_API_URL || '';
 const serverURL = process.env.REACT_APP_SERVER_URL || '';
 
-const onDelete = id => {
-  fetch(`${apiURL}/contacts/${id}`, {
-    method: 'DELETE'
-  })
-    .then(res => res.json())
-    .catch(err => console.log(err))
-    .then(res => console.log(res));
+const styles = {
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    margin: 20
+  },
+  bigAvatar: {
+    width: 60,
+    height: 60
+  }
 };
 
-const ContactItemDetails = ({ contacts, contactId }) => {
+const ContactItemDetails = ({ contacts, classes, contactId }) => {
   const { schema } = contactSchema;
   const { items = {} } = contacts;
   const item = items[contactId];
+
+  if (!item) {
+    return <Redirect to="/" />;
+  }
 
   const {
     id,
@@ -29,30 +41,40 @@ const ContactItemDetails = ({ contacts, contactId }) => {
   } = item;
 
   const details = { ...rest };
+  const {
+    id: schemaId,
+    name: schemaName,
+    imageFile,
+    ...properties
+  } = schema.properties;
+  const schemaProps = { ...properties };
 
   return (
-    <Fragment>
-      <h1>{name}</h1>
-      <img src={`${serverURL}/avatars/${avatar}`} alt={name} />
-      {Object.keys(schema.properties).map(key => (
-        <div key={key}>
-          <h2>{schema.properties[key].title}</h2>
-          {schema.properties[key].properties
-            && Object.keys(schema.properties[key].properties).map(subKey => (
-              <div key={subKey}>
-                <h3>{schema.properties[key].properties[subKey].title}</h3>
-                <p>{(details[key] && details[key][subKey]) || ''}</p>
-              </div>
-            ))}
-          {!schema.properties[key].properties && <p>{details[key] || ''}</p>}
-        </div>
-      ))}
-      <button onClick={() => onDelete(id)}>Delete</button>
-    </Fragment>
+    <div className={classes.root}>
+      <Avatar
+        alt={name}
+        src={`${serverURL}/avatars/${item.avatar || 'default.png'}`}
+        className={classes.bigAvatar}
+      />
+      <Typography variant="headline">
+        {name}
+      </Typography>
+      <List>
+        {Object.keys(schemaProps).map(key => (
+          <DetailsBlock
+            key={key}
+            property={schemaProps[key]}
+            value={details[key]}
+          />
+        ))}
+      </List>
+      <DeleteConfirmationButton id={id} />
+    </div>
   );
 };
 
 ContactItemDetails.propTypes = {
+  classes: PropTypes.oneOfType([PropTypes.object]).isRequired,
   contactId: PropTypes.string.isRequired,
   contacts: PropTypes.shape({
     items: PropTypes.object,
@@ -60,4 +82,4 @@ ContactItemDetails.propTypes = {
   }).isRequired
 };
 
-export default withContacts(ContactItemDetails);
+export default withContacts(withStyles(styles)(ContactItemDetails));

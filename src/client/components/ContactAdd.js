@@ -1,37 +1,59 @@
-import React, { Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
+import { Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import Form from 'react-jsonschema-form';
 import { contactSchema } from '../schemas';
-import SubBar from './SubBar';
+import TopBar from './TopBar';
+import Main from './Main';
+import { withContacts } from '../hoc';
 import 'bootstrap/dist/css/bootstrap.css';
 
-const apiURL = process.env.REACT_APP_API_URL || '';
+class ContactAdd extends Component {
+  constructor() {
+    super();
+    this.onSubmit = this.onSubmit.bind(this);
+  }
 
-const onSubmit = ({ formData }) => {
-  const { id, ...details } = formData;
-  fetch(`${apiURL}/contacts`, {
-    method: 'PUT',
-    body: JSON.stringify({ ...details }),
-    headers: {
-      'Content-Type': 'application/json'
+  onSubmit({ formData }) {
+    const { onAddContact } = this.props;
+    const { id, ...details } = formData;
+    onAddContact({ ...details });
+  }
+
+  render() {
+    const { schema, uiSchema } = contactSchema;
+    const { isAdded = false, isFetching = false } = this.props;
+
+    if (isAdded) {
+      return <Redirect to="/" />;
     }
-  })
-    .then(res => res.json())
-    .catch(err => console.log(err))
-    .then(res => console.log(res));
+
+    return (
+      <Fragment>
+        <TopBar title="Add New Contact" backTo="/" />
+        {!isFetching && (
+          <Main>
+            <Form
+              schema={schema}
+              uiSchema={uiSchema}
+              onSubmit={this.onSubmit}
+            />
+          </Main>
+        )}
+      </Fragment>
+    );
+  }
+}
+
+ContactAdd.defaultProps = {
+  isAdded: false,
+  isFetching: false
 };
 
-const ContactAdd = () => {
-  const { schema, uiSchema } = contactSchema;
-  return (
-    <Fragment>
-      <SubBar title="Add New Contact" />
-      <Form
-        schema={schema}
-        uiSchema={uiSchema}
-        onSubmit={onSubmit}
-      />
-    </Fragment>
-  );
+ContactAdd.propTypes = {
+  onAddContact: PropTypes.func.isRequired,
+  isAdded: PropTypes.bool,
+  isFetching: PropTypes.bool
 };
 
-export default ContactAdd;
+export default withContacts(ContactAdd);

@@ -8,7 +8,7 @@ const Main = ({ isFetching = true, children = null }) => {
   }
 
   return (
-    <div style={{ flex: '0 1 960px', justifyContent: 'center' }}>
+    <div style={{ flex: '0 1 960px', justifyContent: 'center', margin: '20px' }}>
       {children}
     </div>
   );

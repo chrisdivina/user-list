@@ -14,7 +14,15 @@ export default createSelector(
       const { id, avatar, ...details } = contacts.items[contactId];
       const contact = { ...details };
       return Object.keys(contact).some(key => {
-        if (contact[key].includes(filter)) {
+        if (typeof contact[key] === 'object') {
+          return Object.keys(contact[key]).some(subKey => {
+            if (contact[key][subKey].includes(filter)) {
+              items[contactId].match = contact[key][subKey].replace(filter, `<b>${filter}</b>`);
+              return true;
+            }
+            return false;
+          });
+        } else if (contact[key].includes(filter)) {
           items[contactId].match = contact[key].replace(filter, `<b>${filter}</b>`);
           return true;
         }

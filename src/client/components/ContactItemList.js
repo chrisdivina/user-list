@@ -5,6 +5,7 @@ import { withContacts } from '../hoc';
 
 const ContactItemList = ({ contacts = {} }) => {
   const { itemsById = [], items = {} } = contacts;
+
   const styles = {
     listStyle: 'none',
     paddingLeft: 0
