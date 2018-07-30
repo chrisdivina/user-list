@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import Form from 'react-jsonschema-form';
-import { Link } from 'react-router-dom';
 import { contactSchema } from '../schemas';
+import SubBar from './SubBar';
+import 'bootstrap/dist/css/bootstrap.css';
 
 const apiURL = process.env.REACT_APP_API_URL || '';
 
@@ -19,22 +20,18 @@ const onSubmit = ({ formData }) => {
     .then(res => console.log(res));
 };
 
-const UserForm = () => {
+const ContactAdd = () => {
   const { schema, uiSchema } = contactSchema;
   return (
-    <div>
-      <div>
-        <Link to="/">
-          Back
-        </Link>
-      </div>
+    <Fragment>
+      <SubBar title="Add New Contact" />
       <Form
         schema={schema}
         uiSchema={uiSchema}
         onSubmit={onSubmit}
       />
-    </div>
+    </Fragment>
   );
 };
 
-export default UserForm;
+export default ContactAdd;

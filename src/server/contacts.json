@@ -1,10 +1,13 @@
 [
   {
     "name": "Christophe Divina",
-    "address": "Flat 178,, Roma Corte,, 1 Elmira Street",
-    "phone": "7591920611",
+    "address": "497 Rue Galt",
     "email": "christophedivina@gmail.com",
-    "id": "kfrzueeWcm",
-    "avatar": "kfrzueeWcm.jpeg"
+    "id": "2BIHkmNRF",
+    "avatar": "kfrzueeWcm.jpeg",
+    "jobTitle": "Senior Front-End Developer",
+    "phones": {
+      "mobile": "15147079282"
+    }
   }
 ]

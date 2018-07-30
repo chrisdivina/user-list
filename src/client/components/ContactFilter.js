@@ -36,7 +36,7 @@ class ContactFilter extends PureComponent {
 
     return (
       <FormControl className={classes.root}>
-        <InputLabel htmlFor="adornment-password">Filter</InputLabel>
+        <InputLabel htmlFor="adornment-password">Search</InputLabel>
         <Input
           onChange={this.onFilter}
           value={filter}

@@ -1,17 +1,34 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { getContacts } from '../reducers/contacts';
 import { getFilteredContacts } from '../selectors';
 
 const withContacts = WrappedComponent => {
-  const Contacts = props => <WrappedComponent {...props} />;
+  class Contacts extends PureComponent {
+    componentDidMount() {
+      const { loadContacts, contacts } = this.props;
+      if (!contacts.items) {
+        loadContacts();
+      }
+    }
+
+    render() {
+      return <WrappedComponent {...this.props} />;
+    }
+  }
+
+  Contacts.propTypes = {
+    contacts: PropTypes.shape({}).isRequired,
+    loadContacts: PropTypes.func.isRequired
+  };
 
   const mapStateToProps = state => {
     const { contacts = {} } = state;
     const { isFetching = true } = contacts;
     return {
       contacts: getFilteredContacts(state),
-      areContactsFetching: isFetching
+      isFetching
     };
   };
 

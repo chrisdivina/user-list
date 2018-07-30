@@ -6,7 +6,7 @@ const getFilter = state => state.filter;
 export default createSelector(
   [getContacts, getFilter],
   (contacts, filter) => {
-    if (filter.length === 0) {
+    if (filter.length < 3) {
       return contacts;
     }
     const { items } = contacts;
@@ -15,7 +15,7 @@ export default createSelector(
       const contact = { ...details };
       return Object.keys(contact).some(key => {
         if (contact[key].includes(filter)) {
-          items[contactId].match = contact[key].replace(filter, `<em>${filter}</em>`);
+          items[contactId].match = contact[key].replace(filter, `<b>${filter}</b>`);
           return true;
         }
         return false;

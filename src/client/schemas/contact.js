@@ -1,5 +1,4 @@
 const schema = {
-  title: 'User',
   type: 'object',
   required: ['name'],
   properties: {
@@ -7,7 +6,15 @@ const schema = {
     name: { type: 'string', title: 'Full Name' },
     jobTitle: { type: 'string', title: 'Job Title' },
     address: { type: 'string', title: 'Address' },
-    phone: { type: 'string', title: 'Phone Number' },
+    phones: {
+      type: 'object',
+      title: 'Phone Numbers',
+      properties: {
+        home: { type: 'string', title: 'Home' },
+        mobile: { type: 'string', title: 'Mobile' },
+        work: { type: 'string', title: 'Work' }
+      }
+    },
     email: { type: 'string', format: 'email', title: 'Email Address' },
     imageFile: { type: 'string', format: 'data-url', title: 'Profile Picture' }
   }

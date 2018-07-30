@@ -1,51 +1,20 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import ReactHtmlParser from 'react-html-parser';
-import { withContacts, withFilter } from '../hoc';
+import React, { Fragment } from 'react';
 import TopBar from './TopBar';
 import ContactFilter from './ContactFilter';
+import ContactItemList from './ContactItemList';
+import AddButton from './AddButton';
+import Main from './Main';
 
-class ContactList extends PureComponent {
-  componentDidMount() {
-    const { loadContacts } = this.props;
-    loadContacts();
-  }
+const ContactList = () => (
+  <Fragment>
+    <TopBar title="Contacts">
+      <AddButton to="/add" />
+    </TopBar>
+    <Main>
+      <ContactFilter />
+      <ContactItemList />
+    </Main>
+  </Fragment>
+);
 
-  render() {
-    const { areContactsFetching, contacts, filter } = this.props;
-    const { itemsById, items } = contacts;
-
-    return (
-      <div>
-        <TopBar />
-        <ContactFilter />
-        {!areContactsFetching
-          && (
-            <ul>
-              { itemsById.map(id => (
-                <li key={id}>
-                  <Link to={`/contact/${id}`}>
-                    {items[id].name}
-                  </Link>
-                  {filter && items[id].match && items[id].match.length > 0
-                    && <p>{ReactHtmlParser(items[id].match)}</p>
-                  }
-                </li>
-              ))}
-            </ul>
-          )
-        }
-      </div>
-    );
-  }
-}
-
-ContactList.propTypes = {
-  loadContacts: PropTypes.func.isRequired,
-  areContactsFetching: PropTypes.bool.isRequired,
-  contacts: PropTypes.arrayOf.isRequired,
-  filter: PropTypes.string.isRequired
-};
-
-export default withFilter(withContacts(ContactList));
+export default ContactList;

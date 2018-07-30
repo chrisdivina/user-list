@@ -4,7 +4,6 @@ const path = require('path');
 module.exports = function upload(req, res, next) {
   const { imageFile } = req.body;
   const id = req.body.id || req.params.id;
-  console.log(imageFile);
   if (imageFile) {
     const regex = /data:image\/([\w+]+);name=(.+);base64,(.*)/;
     const parts = imageFile.match(regex);

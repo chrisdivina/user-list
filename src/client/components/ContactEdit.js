@@ -1,50 +1,27 @@
-import React from 'react';
-import Form from 'react-jsonschema-form';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import { contactSchema } from '../schemas';
-import { withContacts } from '../hoc';
+import TopBar from './TopBar';
+import Main from './Main';
+import ContactItemEdit from './ContactItemEdit';
 
-const apiURL = process.env.REACT_APP_API_URL || '';
-
-const onSubmit = ({ formData }) => {
-  const { id, ...details } = formData;
-  fetch(`${apiURL}/contacts/${id}`, {
-    method: 'POST',
-    body: JSON.stringify({ ...details }),
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-    .then(res => res.json())
-    .catch(err => console.log(err))
-    .then(res => console.log(res));
-};
-
-const ContactEdit = ({ match, contacts }) => {
-  const { schema, uiSchema } = contactSchema;
-  const contact = contacts.items[match.params.id];
-
-  return (
-    <div>
-      <div>
-        <Link to="/">
-          Back
-        </Link>
-      </div>
-      <Form
-        schema={schema}
-        uiSchema={uiSchema}
-        onSubmit={onSubmit}
-        formData={contact}
-      />
-    </div>
-  );
-};
+const ContactEdit = ({ match }) => (
+  <Fragment>
+    <TopBar
+      title="Edit Contact"
+      backTo={`/contact/${match.params.id}`}
+    />
+    <Main style={{ margin: '10px' }}>
+      <ContactItemEdit contactId={match.params.id} />
+    </Main>
+  </Fragment>
+);
 
 ContactEdit.propTypes = {
-  match: PropTypes.shape({}).isRequired,
-  contacts: PropTypes.shape({}).isRequired
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string
+    })
+  }).isRequired
 };
 
-export default withContacts(ContactEdit);
+export default ContactEdit;

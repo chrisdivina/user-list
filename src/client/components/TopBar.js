@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import {
-  AppBar, Toolbar, Typography, IconButton
+  AppBar, Toolbar, Typography, IconButton, LinearProgress
 } from '@material-ui/core';
-import { AddCircle } from '@material-ui/icons';
+import { ArrowBack } from '@material-ui/icons';
+import { withContacts } from '../hoc';
 
 const styles = {
   root: {
-    flexGrow: 1
+    flex: '1 1 100%'
   },
   flex: {
     flexGrow: 1
@@ -18,28 +19,56 @@ const styles = {
     marginLeft: -12,
     marginRight: 20
   },
+  toolButton: {
+    marginLeft: 0,
+    marginRight: -12
+  },
   link: {
     display: 'flex'
   }
 };
 
-const TopBar = ({ classes }) => (
-  <AppBar position="static" color="default">
-    <Toolbar>
-      <Typography variant="title" color="inherit" className={classes.flex}>
-        Contacts
-      </Typography>
-      <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-        <Link className={classes.link} to="/add">
-          <AddCircle />
-        </Link>
-      </IconButton>
-    </Toolbar>
-  </AppBar>
+const TopBar = ({
+  classes, title, backTo = null, isFetching = true, children = null
+}) => (
+  <div className={classes.root}>
+    <AppBar position="static" color="default">
+      <Toolbar>
+        {backTo && (
+          <IconButton className={classes.menuButton} color="inherit">
+            <Link className={classes.link} to={backTo}>
+              <ArrowBack />
+            </Link>
+          </IconButton>
+        )}
+        <Typography variant="title" color="inherit" className={classes.flex}>
+          {title}
+        </Typography>
+        {children}
+      </Toolbar>
+    </AppBar>
+    {isFetching && <LinearProgress color="secondary" />}
+  </div>
 );
 
-TopBar.propTypes = {
-  classes: PropTypes.shape({}).isRequired
+TopBar.defaultProps = {
+  backTo: null,
+  isFetching: true,
+  children: null
 };
 
-export default withStyles(styles)(TopBar);
+TopBar.propTypes = {
+  classes: PropTypes.shape({}).isRequired,
+  backTo: PropTypes.string,
+  title: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object
+  ]).isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object
+  ]),
+  isFetching: PropTypes.bool
+};
+
+export default withContacts(withStyles(styles)(TopBar));
